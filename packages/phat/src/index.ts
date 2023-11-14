@@ -16,8 +16,8 @@ const addressCoder = new Coders.AddressCoder("address");
 const stringCoder = new Coders.StringCoder("string");
 const booleanCoder = new Coders.BooleanCoder("boolean");
 
-function encodeReply(reply: [number, string, number, boolean]): HexString {
-    return Coders.encode([uintCoder, addressCoder, uintCoder, booleanCoder], reply) as HexString;
+function encodeReply(reply: [number, number, string, boolean]): HexString {
+    return Coders.encode([uintCoder, uintCoder, addressCoder, booleanCoder], reply) as HexString;
 }
 
 // Defined in TestLensOracle.sol
@@ -421,32 +421,32 @@ function calculateScore(queryStatsResults: number[], queryMultipliers: number[])
 //
 export default function main(request: HexString, secrets: string): HexString {
     console.log(`handle req: ${request}`);
-    let requestId, encodedAccountId, encodedRequester, threshold;
+    let requestId, encodedRequester, encodedTarget, threshold;
     try {
-        [requestId, encodedAccountId, encodedRequester, threshold] = Coders.decode([uintCoder, addressCoder, addressCoder, uint8Coder], request);
+        [requestId, encodedRequester, encodedTarget, threshold] = Coders.decode([uintCoder, addressCoder, addressCoder, uint8Coder], request);
         console.log(`requestId: ${requestId}`);
-        console.log(`encodedTarget: ${encodedAccountId}`);
         console.log(`encodedRequester: ${encodedRequester}`);
+        console.log(`encodedTarget: ${encodedTarget}`);
         console.log(`threshold: ${threshold}`);
         //[requestId, encodedAccountId] = Coders.decode([uintCoder, bytesCoder, addressCoder, bytesArrayCoder], request);
     } catch (error) {
         console.info("Malformed request received");
-        return encodeReply([TYPE_ERROR, encodedRequester, 0, false]);
+        return encodeReply([TYPE_ERROR, requestId, encodedRequester, false]);
     }
 
     try {
-        const multiplierData = fetchAirstackApiStats(secrets, encodedAccountId, "ipeciura.eth");
+        const multiplierData = fetchAirstackApiStats(secrets, encodedTarget, "ipeciura.eth");
         //let stats = calculateScore(multiplierData, threshold);
         let stats = true;
-        console.log("response:", [TYPE_RESPONSE, encodedRequester, requestId, stats]);
-        return encodeReply([TYPE_RESPONSE, encodedRequester, requestId, stats]);
+        console.log("response:", [TYPE_RESPONSE, requestId, encodedRequester, stats]);
+        return encodeReply([TYPE_RESPONSE, requestId, encodedRequester, stats]);
     } catch (error) {
         if (error === Error.FailedToFetchData) {
             throw error;
         } else {
             // otherwise tell client we cannot process it
-            console.log("error:", [TYPE_ERROR, encodedRequester, requestId, false]);
-            return encodeReply([TYPE_ERROR, encodedRequester, requestId, false]);
+            console.log("error:", [TYPE_ERROR, requestId, encodedRequester, false]);
+            return encodeReply([TYPE_ERROR, requestId, encodedRequester, false]);
         }
     }
 }

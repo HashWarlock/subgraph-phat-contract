@@ -22,12 +22,12 @@ export const TrustScoreRequestEvents = ({ requests }: TrustScoreRequestEventsPro
       </div>
 
       <table className="mt-4 p-2 bg-base-100 table table-zebra shadow-lg w-full overflow-hidden">
-        <thead className="text-accent text-lg">
+        <thead className="text-secondary text-md">
           <tr>
-            <th className="bg-primary text-lg" colSpan={3}>
+            <th className="bg-primary text-lg" colSpan={2}>
               <span>Requester</span>
             </th>
-            <th className="bg-primary text-lg" colSpan={3}>
+            <th className="bg-primary text-lg" colSpan={2}>
               <span>Target</span>
             </th>
             <th className="bg-primary text-lg">
@@ -38,10 +38,10 @@ export const TrustScoreRequestEvents = ({ requests }: TrustScoreRequestEventsPro
         <tbody>
           {requests.map(({ requester, target, threshold, premium, value }, i) => (
             <tr key={i}>
-              <td colSpan={3} className="py-3.5">
+              <td colSpan={2} className="py-3.5">
                 <Address address={requester} size="lg" />
               </td>
-              <td colSpan={3} className="py-3.5">
+              <td colSpan={2} className="py-3.5">
                 <Address address={target} size="lg" />
               </td>
               <td className="col-span-1 text-lg">

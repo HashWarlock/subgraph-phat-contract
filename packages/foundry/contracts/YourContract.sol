@@ -111,13 +111,14 @@ contract YourContract is PhatRollupAnchor {
         address target = requests[id];
         uint8 threshold = userTrustScoreThresholds[requester];
         if (respType == TYPE_RESPONSE) {
-            emit ResponseReceived(id, requester, requests[id], threshold, theGraphTrustScore);
+            emit ResponseReceived(id, requester, target, threshold, theGraphTrustScore);
             delete requests[id];
         } else if (respType == TYPE_ERROR) {
-            emit ErrorReceived(id, requester, requests[id], false);
+            emit ErrorReceived(id, requester, target, false);
             delete requests[id];
         }
-        emit TheGraphTrustScoreReceived(id, requester, requests[id], threshold, theGraphTrustScore);
+        console.logString("Trust Score");
+        emit TheGraphTrustScoreReceived(id, requester, target, threshold, theGraphTrustScore);
         lastTargetAddress = requests[id];
         lastTrustScore = theGraphTrustScore;
     }

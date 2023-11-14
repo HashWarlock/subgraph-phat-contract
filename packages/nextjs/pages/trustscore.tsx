@@ -28,8 +28,6 @@ const TrustScore: NextPage = () => {
   const [target, setTarget] = useState<AddressType>();
   const [threshold, setThreshold] = useState<bigint>(BigInt(0));
 
-  const videoRef = useRef<HTMLVideoElement>(null);
-
   const [requested, setRequested] = useState(false);
   const [isRequesting, setIsRequesting] = useState(false);
 
@@ -51,7 +49,7 @@ const TrustScore: NextPage = () => {
           requestsHistoryData?.map(({ args }) => ({
             requester: args.requester,
             target: args.target,
-            threshold: args.threshold.toString(8).toUpperCase(),
+            threshold: args.threshold.toString().toUpperCase(),
             premium: args.premium,
             value: args.value,
           })) || []
@@ -94,7 +92,7 @@ const TrustScore: NextPage = () => {
       setReceived(
         (
           receivedHistoryData?.map(({ args }) => ({
-            requestId: args.requestId,
+            reqid: args.reqid,
             requester: args.requester,
             target: args.target,
             threshold: args.threshold,
@@ -103,21 +101,21 @@ const TrustScore: NextPage = () => {
         ).slice(0, MAX_TABLE_ROWS),
       );
     }
-  }, [receivedHistoryData, receivedHistoryLoading, received.length]);
+  }, [received, receivedHistoryData, receivedHistoryLoading]);
 
   useScaffoldEventSubscriber({
     contractName: "YourContract",
     eventName: "TheGraphTrustScoreReceived",
     listener: logs => {
       logs.map(log => {
-        const { requestId, requester, target, threshold, theGraphTrustScore } = log.args;
-
-        if (requestId && requester && target && threshold && theGraphTrustScore) {
+        const { reqid, requester, target, threshold, theGraphTrustScore } = log.args;
+        if (reqid && requester && target && threshold && theGraphTrustScore) {
+          console.log(`[${reqid}, ${requester}, ${target}, ${threshold}, ${theGraphTrustScore}]`);
           // setTimeout(() => {
           setIsRequesting(false);
           // @ts-ignore
           setReceived(received =>
-            [{ requestId, requester, target, threshold, theGraphTrustScore }, ...received].slice(0, MAX_TABLE_ROWS),
+            [{ reqid: reqid.toString().toUpperCase(), requester, target, threshold: threshold.toString().toUpperCase(), theGraphTrustScore: theGraphTrustScore.toString().toUpperCase() }, ...received].slice(0, MAX_TABLE_ROWS),
           );
           // }, ROLLING_TIME_MS);
         }
@@ -140,7 +138,7 @@ const TrustScore: NextPage = () => {
     contractName: "YourContract",
     functionName: "getTargetTrustScore",
     value: "0.002",
-    args: [lastTargetAddress, 5],
+    args: [target, Number(threshold)],
   });
 
   useEffect(() => {
@@ -153,13 +151,13 @@ const TrustScore: NextPage = () => {
   return (
     <>
       <MetaHeader />
-      <div className="py-10 px-10">
-        <div className="grid grid-cols-3 max-lg:grid-cols-1">
+      <div className="py-2.5 px-2.5">
+        <div className="grid grid-cols-3 max-md:grid-cols-1">
           <div className="max-lg:row-start-2">
             <TrustScoreRequestEvents requests={requests} />
           </div>
 
-          <div className="flex flex-col items-center pt-4 max-lg:row-start-1">
+          <div className="flex flex-col items-center pt-4 max-md:row-start-1">
             <div className="flex w-full justify-center">
               <span className="text-2xl"> Set Test Requester and Query Threshold </span>
             </div>
@@ -168,7 +166,7 @@ const TrustScore: NextPage = () => {
               <span className="text-accent">Test Requester</span>
               <AddressInput
                 placeholder="Test Requester"
-                value={requester ?? "0x0000000000000000000000000000000000000000"}
+                value={requester ?? ""}
                 onChange={value => setRequester(value)}
               />
               <br></br>
@@ -196,7 +194,7 @@ const TrustScore: NextPage = () => {
                 <span className="text-accent">Target Address</span>
                 <AddressInput
                   placeholder="Target Address"
-                  value={target ?? "0x0000000000000000000000000000000000000000"}
+                  value={target ?? ""}
                   onChange={value => setTarget(value)}
                 />
                 <br></br>
@@ -212,7 +210,7 @@ const TrustScore: NextPage = () => {
                       setRequested(true);
                     }
                     setIsRequesting(true);
-                    getTargetTrustScore({ args: [requester, Number(threshold)] });
+                    getTargetTrustScore({ args: [target, Number(threshold)] });
                   }}
                   disabled={isRequesting}
                   className="mt-2 btn btn-secondary btn-xl normal-case font-xl text-lg"
@@ -230,8 +228,8 @@ const TrustScore: NextPage = () => {
             </div>
           </div>
 
-          <div className="max-lg:row-start-3">
-            <TrustScoreReceivedEvents requests={received} />
+          <div className="max-md:row-start-3">
+            <TrustScoreReceivedEvents received={received} />
           </div>
         </div>
       </div>
