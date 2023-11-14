@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
+import { parseEther } from "viem";
 import { useContractWrite, useNetwork } from "wagmi";
 import { getParsedError } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
@@ -35,11 +36,12 @@ export const useScaffoldContractWrite = <
   const configuredNetwork = getTargetNetwork();
 
   const wagmiContractWrite = useContractWrite({
+    chainId: configuredNetwork.id,
     address: deployedContractData?.address,
     abi: deployedContractData?.abi as Abi,
     functionName: functionName as any,
     args: args as unknown[],
-    value: value,
+    value: value ? parseEther(value) : undefined,
     ...writeConfig,
   });
 
@@ -71,7 +73,7 @@ export const useScaffoldContractWrite = <
           () =>
             wagmiContractWrite.writeAsync({
               args: newArgs ?? args,
-              value: newValue ?? value,
+              value: newValue ? parseEther(newValue) : value && parseEther(value),
               ...otherConfig,
             }),
           { onBlockConfirmation, blockConfirmations },
