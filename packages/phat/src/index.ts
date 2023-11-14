@@ -4,6 +4,11 @@
 // *** WITH THE PHALA TEAM AT https://discord.gg/5HfmWQNX THANK YOU             ***
 import "@phala/pink-env";
 import { Coders } from "@phala/ethers";
+import { queryManager } from "./subgraphQueryManager";
+import { Variables, QueryAndVariables, generateQuery,
+    hasLensAndFarcasterAccountsQuery, hasVotesDelegatedToQuery,
+    isEnsPrimaryAccountQuery, isFollowingSocialsQuery, isFollowingTargetQuery,
+    requesterTxWithTargetQuery} from "./subgraphQueries";
 
 type HexString = `0x${string}`;
 
@@ -64,174 +69,31 @@ function fetchAirstackApiStats(airstackApi: string, target: string, requester: s
     const airstackApiUrl = "https://api.airstack.xyz/gql";
     // const target = "ipeciura.eth";
     // const requester = "betashop.eth"
+    const variables: Variables = {
+        target: target,
+        requester: requester
+    };
     // profile_id should be like 0x0001
     let headers = {
         "Content-Type": "application/json",
         "User-Agent": "phat-contract",
         "Authorization": "3a41775a358a4cb99ca9a29c1f6fc486",
     };
-    let queryIsFollowingTarget = JSON.stringify({
-        query: `
-            query isFollowingTarget {
-            Wallet(input: {identity: "${requester}", blockchain: ethereum}) {
-                socialFollowings(
-                    input: {filter: {identity: {_in: ["${target}"]}}}
-            ) {
-                    Following {
-                        dappName
-                        dappSlug
-                        followingProfileId
-                        followerProfileId
-                        followerAddress {
-                            addresses
-                            socials {
-                                dappName
-                                profileName
-                            }
-                            domains {
-                                name
-                            }
-                        }
-                    }
-                }
-            }
-        }`,
-    });
+    let headers2 = {
+        "Content-Type": "application/json",
+        "User-Agent": "phat-contract",
+    }
+    let queryIsFollowingTarget = generateQuery(isFollowingTargetQuery, variables);
     let body0 = stringToHex(queryIsFollowingTarget);
-    let queryTxCountWithTarget = JSON.stringify({
-        query: `
-            query GetTokenTransfers {
-              ethereum: TokenTransfers(
-                input: {filter: {from: {_in: ["${requester}"]}, to: {_eq: "${target}"}}, blockchain: ethereum}
-              ) {
-                TokenTransfer {
-                  from {
-                    addresses
-                    domains {
-                      name
-                    }
-                    socials {
-                      dappName
-                      profileName
-                      profileTokenId
-                      profileTokenIdHex
-                      userId
-                      userAssociatedAddresses
-                    }
-                  }
-                  to {
-                    addresses
-                    domains {
-                      name
-                    }
-                    socials {
-                      dappName
-                      profileName
-                      profileTokenId
-                      profileTokenIdHex
-                      userId
-                      userAssociatedAddresses
-                    }
-                  }
-                  transactionHash
-                }
-                pageInfo {
-                  nextCursor
-                  prevCursor
-                }
-              }
-              polygon: TokenTransfers(
-                input: {filter: {from: {_in: ["${requester}"]}, to: {_eq: "${target}"}}, blockchain: polygon}
-              ) {
-                TokenTransfer {
-                  from {
-                    addresses
-                    domains {
-                      name
-                    }
-                    socials {
-                      dappName
-                      profileName
-                      profileTokenId
-                      profileTokenIdHex
-                      userId
-                      userAssociatedAddresses
-                    }
-                  }
-                  to {
-                    addresses
-                    domains {
-                      name
-                    }
-                    socials {
-                      dappName
-                      profileName
-                      profileTokenId
-                      profileTokenIdHex
-                      userId
-                      userAssociatedAddresses
-                    }
-                  }
-                  transactionHash
-                }
-                pageInfo {
-                  nextCursor
-                  prevCursor
-                }
-              }
-            }`
-    });
+    let queryTxCountWithTarget = generateQuery(requesterTxWithTargetQuery, variables);
     let body1 = stringToHex(queryTxCountWithTarget);
-    let queryHasPrimaryEns = JSON.stringify( {
-        query: `
-            query MyQuery {
-                Domains(input: {filter: {owner: {_in: ["${target}"]}, isPrimary: {_eq: true}}, blockchain: ethereum}) {
-                    Domain {
-                      name
-                      owner
-                      isPrimary
-                    }
-                }
-            }
-        `
-    });
+    let queryHasPrimaryEns = generateQuery(isEnsPrimaryAccountQuery, variables);
     let body2 = stringToHex(queryHasPrimaryEns);
-    let queryHasLensAndFarcasterAccounts = JSON.stringify({
-        query: `
-            query MyQuery {
-                Socials(
-                    input: {filter: {dappName: {_in: [lens, farcaster]}, identity: {_in: ["${target}"]}}, blockchain: ethereum}
-                    ) {
-                        Social {
-                          profileName
-                          profileTokenId
-                          profileTokenIdHex
-                          followerCount
-                          followingCount
-                        }
-                }
-            }
-        `
-    });
+    let queryHasLensAndFarcasterAccounts = generateQuery(hasLensAndFarcasterAccountsQuery, variables);
     let body3 = stringToHex(queryHasLensAndFarcasterAccounts);
-    let queryPoapsOwnedByTarget = JSON.stringify({
-        query: `
-            query POAPsOwnedByTarget {
-                Poaps(
-                    input: {filter: {owner: {_in: ["${target}"]}}, blockchain: ALL}
-                    ) {
-                    Poap {
-                          mintOrder
-                          mintHash
-                          poapEvent {
-                            isVirtualEvent
-                          }
-                        }
-                    }
-            }
-        `
-    });
-    let body4 = stringToHex(queryPoapsOwnedByTarget);
+    let queryDelegationsOnSnapshot = generateQuery(hasVotesDelegatedToQuery, variables);
+    let snapshotSubgraphUrl = "https://gateway.thegraph.com/api/cd22a01e5b7f9828cddcb52caf03ee79/subgraphs/id/3Q4vnuSqemXnSNHoiLD7wdBbGCXszUYnUbTz191kDMNn";
+    let body4 = stringToHex(queryDelegationsOnSnapshot);
     //
     // In Phat Function runtime, we not support async/await, you need use `pink.batchHttpRequest` to
     // send http request. The function will return an array of response.
@@ -268,9 +130,9 @@ function fetchAirstackApiStats(airstackApi: string, target: string, requester: s
                 returnTextBody: true,
             },
             {
-                url: airstackApiUrl,
+                url: snapshotSubgraphUrl,
                 method: "POST",
-                headers,
+                headers: headers2,
                 body: body4,
                 returnTextBody: true,
             },
@@ -435,7 +297,7 @@ export default function main(request: HexString, secrets: string): HexString {
     }
 
     try {
-        const multiplierData = fetchAirstackApiStats(secrets, encodedTarget, "ipeciura.eth");
+        const multiplierData = fetchAirstackApiStats(secrets, encodedTarget, encodedRequester);
         //let stats = calculateScore(multiplierData, threshold);
         let stats = true;
         console.log("response:", [TYPE_RESPONSE, requestId, encodedRequester, stats]);
