@@ -21,19 +21,19 @@ export const TrustScoreReceivedEvents = ({ received }: TrustScoreReceivedEventsP
         <p className="flex justify-center text-lg font-bold">Trust Score Received Events</p>
       </div>
 
-      <table className="mt-4 p-2 bg-base-100 table table-zebra shadow-lg w-full overflow-hidden">
-        <thead className="text-secondary text-lg">
+      <table className="mt-4 p-2 bg-base-100 table table-zebra shadow-sm w-full overflow-hidden">
+        <thead className="text-secondary text-sm">
           <tr>
-            <th className="bg-primary text-lg" colSpan={2}>
+            <th className="bg-primary text-sm" colSpan={2}>
               <span>Requester</span>
             </th>
-            <th className="bg-primary text-lg" colSpan={2}>
+            <th className="bg-primary text-sm" colSpan={2}>
               <span>Target</span>
             </th>
-            <th className="bg-primary text-lg">
+            <th className="bg-primary text-sm">
               <span>Threshold (1-5)</span>
             </th>
-            <th className="bg-primary text-lg">
+            <th className="bg-primary text-sm">
               <span>Trusted (True/False)</span>
             </th>
           </tr>
@@ -42,15 +42,15 @@ export const TrustScoreReceivedEvents = ({ received }: TrustScoreReceivedEventsP
           {received.map(({ reqid, requester, target, threshold, theGraphTrustScore }, i) => (
             <tr key={i}>
               <td colSpan={2} className="py-2.5">
-                <Address address={requester} size="lg" />
+                <Address address={requester} size="sm" />
               </td>
               <td colSpan={2} className="py-2.5">
-                <Address address={target} size="lg" />
+                <Address address={target} size="sm" />
               </td>
-              <td className="col-span-1 text-lg">
+              <td className="col-span-1 text-sm">
                 <span> {threshold} </span>
               </td>
-              <td className="col-span-1 text-lg">
+              <td className={theGraphTrustScore === "TRUE" ? 'py-0.5 badge badge-success' : 'col-span-1 text-sm text-red'}>
                 <span> {theGraphTrustScore} </span>
               </td>
             </tr>

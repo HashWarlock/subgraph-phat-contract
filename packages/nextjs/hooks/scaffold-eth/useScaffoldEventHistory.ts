@@ -23,20 +23,20 @@ import {
  * @param config.receiptData - if set to true it will return the receipt data for each event (default: false)
  */
 export const useScaffoldEventHistory = <
-  TContractName extends ContractName,
-  TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
-  TBlockData extends boolean = false,
-  TTransactionData extends boolean = false,
-  TReceiptData extends boolean = false,
+    TContractName extends ContractName,
+    TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
+    TBlockData extends boolean = false,
+    TTransactionData extends boolean = false,
+    TReceiptData extends boolean = false,
 >({
-  contractName,
-  eventName,
-  fromBlock,
-  filters,
-  blockData,
-  transactionData,
-  receiptData,
-}: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
+    contractName,
+    eventName,
+    fromBlock,
+    filters,
+    blockData,
+    transactionData,
+    receiptData,
+  }: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
   const [events, setEvents] = useState<any[]>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>();
@@ -51,7 +51,7 @@ export const useScaffoldEventHistory = <
         }
 
         const event = (deployedContractData.abi as Abi).find(
-          part => part.type === "event" && part.name === eventName,
+            part => part.type === "event" && part.name === eventName,
         ) as AbiEvent;
 
         const logs = await publicClient.getLogs({
@@ -66,17 +66,17 @@ export const useScaffoldEventHistory = <
             log: logs[i],
             args: logs[i].args,
             block:
-              blockData && logs[i].blockHash === null
-                ? null
-                : await publicClient.getBlock({ blockHash: logs[i].blockHash as Hash }),
+                blockData && logs[i].blockHash === null
+                    ? null
+                    : await publicClient.getBlock({ blockHash: logs[i].blockHash as Hash }),
             transaction:
-              transactionData && logs[i].transactionHash !== null
-                ? await publicClient.getTransaction({ hash: logs[i].transactionHash as Hash })
-                : null,
+                transactionData && logs[i].transactionHash !== null
+                    ? await publicClient.getTransaction({ hash: logs[i].transactionHash as Hash })
+                    : null,
             receipt:
-              receiptData && logs[i].transactionHash !== null
-                ? await publicClient.getTransactionReceipt({ hash: logs[i].transactionHash as Hash })
-                : null,
+                receiptData && logs[i].transactionHash !== null
+                    ? await publicClient.getTransactionReceipt({ hash: logs[i].transactionHash as Hash })
+                    : null,
           });
         }
         setEvents(newEvents);
@@ -109,15 +109,15 @@ export const useScaffoldEventHistory = <
   ]);
 
   const eventHistoryData = useMemo(
-    () =>
-      events?.map(addIndexedArgsToEvent) as UseScaffoldEventHistoryData<
-        TContractName,
-        TEventName,
-        TBlockData,
-        TTransactionData,
-        TReceiptData
-      >,
-    [events],
+      () =>
+          events?.map(addIndexedArgsToEvent) as UseScaffoldEventHistoryData<
+              TContractName,
+              TEventName,
+              TBlockData,
+              TTransactionData,
+              TReceiptData
+          >,
+      [events],
   );
 
   return {

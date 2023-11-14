@@ -1,16 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { NextPage } from "next";
-import { formatEther } from "viem";
 import { Address as AddressType } from "viem";
-import { useBalance } from "wagmi";
 import { CalculatorIcon } from "@heroicons/react/24/outline";
 import { MetaHeader } from "~~/components/MetaHeader";
-import { Address, AddressInput, IntegerVariant } from "~~/components/scaffold-eth";
+import { AddressInput, IntegerVariant } from "~~/components/scaffold-eth";
 import { UInt8Input } from "~~/components/trustscore/Input/UInt8Input";
 import { TrustScoreReceived, TrustScoreReceivedEvents } from "~~/components/trustscore/TrustScoreReceived";
 import { TrustScoreRequest, TrustScoreRequestEvents } from "~~/components/trustscore/TrustScoreRequest";
 import {
-  useScaffoldContract,
   useScaffoldContractRead,
   useScaffoldContractWrite,
   useScaffoldEventHistory,
@@ -55,6 +52,7 @@ const TrustScore: NextPage = () => {
           })) || []
         ).slice(0, MAX_TABLE_ROWS),
       );
+      console.log(requests);
     }
   }, [requests, requestsHistoryData, requestsHistoryLoading]);
 
@@ -92,14 +90,15 @@ const TrustScore: NextPage = () => {
       setReceived(
         (
           receivedHistoryData?.map(({ args }) => ({
-            reqid: args.reqid,
+            reqid: args.reqid.toString().toUpperCase(),
             requester: args.requester,
             target: args.target,
-            threshold: args.threshold,
-            theGraphTrustScore: args.theGraphTrustScore,
+            threshold: args.threshold.toString().toUpperCase(),
+            theGraphTrustScore: args.theGraphTrustScore.toString().toUpperCase(),
           })) || []
         ).slice(0, MAX_TABLE_ROWS),
       );
+      console.log(received);
     }
   }, [received, receivedHistoryData, receivedHistoryLoading]);
 
@@ -109,10 +108,11 @@ const TrustScore: NextPage = () => {
     listener: logs => {
       logs.map(log => {
         const { reqid, requester, target, threshold, theGraphTrustScore } = log.args;
-        if (reqid && requester && target && threshold && theGraphTrustScore) {
+        if (requester && target && threshold) {
           console.log(`[${reqid}, ${requester}, ${target}, ${threshold}, ${theGraphTrustScore}]`);
           // setTimeout(() => {
           setIsRequesting(false);
+          setRequested(false);
           // @ts-ignore
           setReceived(received =>
             [{ reqid: reqid.toString().toUpperCase(), requester, target, threshold: threshold.toString().toUpperCase(), theGraphTrustScore: theGraphTrustScore.toString().toUpperCase() }, ...received].slice(0, MAX_TABLE_ROWS),
@@ -152,11 +152,7 @@ const TrustScore: NextPage = () => {
     <>
       <MetaHeader />
       <div className="py-2.5 px-2.5">
-        <div className="grid grid-cols-3 max-md:grid-cols-1">
-          <div className="max-lg:row-start-2">
-            <TrustScoreRequestEvents requests={requests} />
-          </div>
-
+        <div className="grid grid-cols-2 max-md:grid-cols-1">
           <div className="flex flex-col items-center pt-4 max-md:row-start-1">
             <div className="flex w-full justify-center">
               <span className="text-2xl"> Set Test Requester and Query Threshold </span>
@@ -169,8 +165,7 @@ const TrustScore: NextPage = () => {
                 value={requester ?? ""}
                 onChange={value => setRequester(value)}
               />
-              <br></br>
-              <span className="text-accent">Query Threshold</span>
+              <span className="mt-1 text-accent">Query Threshold</span>
               <UInt8Input
                 value={threshold ?? 0n}
                 onChange={value => setThreshold(BigInt(value))}
@@ -181,7 +176,7 @@ const TrustScore: NextPage = () => {
                   setTestSender({ args: [requester, Number(threshold)] });
                 }}
                 disabled={setTestSenderLoading}
-                className="mt-2 btn btn-secondary btn-xl normal-case font-xl text-lg"
+                className="mt-2 btn btn-secondary btn-sm normal-case font-bold text-md"
               >
                 <CalculatorIcon className="h-6 w-6" />
                 Set Config
@@ -189,16 +184,15 @@ const TrustScore: NextPage = () => {
             </div>
 
             <div className="mt-4 pt-2 flex flex-col items-center w-full justify-center border-t-4 border-primary">
-              <span className="text-2xl">Request Target's Trust Score</span>
+              <span className="text-xl">Request Target's Trust Score</span>
               <div className="flex flex-col mt-2 px-7 py-4 bg-base-200 opacity-80 rounded-2xl shadow-lg border-2 border-primary">
-                <span className="text-accent">Target Address</span>
+                <span className="text-primary">Target Address</span>
                 <AddressInput
                   placeholder="Target Address"
                   value={target ?? ""}
                   onChange={value => setTarget(value)}
                 />
-                <br></br>
-                <span className="text-accent">Query Threshold</span>
+                <span className="mt-1 text-primary">Query Threshold</span>
                 <UInt8Input
                   value={threshold ?? 0n}
                   onChange={value => setThreshold(BigInt(value))}
@@ -213,7 +207,7 @@ const TrustScore: NextPage = () => {
                     getTargetTrustScore({ args: [target, Number(threshold)] });
                   }}
                   disabled={isRequesting}
-                  className="mt-2 btn btn-secondary btn-xl normal-case font-xl text-lg"
+                  className="mt-2 btn btn-secondary btn-sm normal-case font-bold text-md"
                 >
                   <svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" className="h-6 w-6">
                     <path
@@ -227,8 +221,8 @@ const TrustScore: NextPage = () => {
               </div>
             </div>
           </div>
-
-          <div className="max-md:row-start-3">
+          <div className="max-lg:row-start-1">
+            <TrustScoreRequestEvents requests={requests} />
             <TrustScoreReceivedEvents received={received} />
           </div>
         </div>
