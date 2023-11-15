@@ -89,37 +89,11 @@ export const requesterTxWithTargetQuery =
         TokenTransfer {
           from {
             addresses
-            domains {
-              name
-            }
-            socials {
-              dappName
-              profileName
-              profileTokenId
-              profileTokenIdHex
-              userId
-              userAssociatedAddresses
-            }
           }
           to {
             addresses
-            domains {
-              name
-            }
-            socials {
-              dappName
-              profileName
-              profileTokenId
-              profileTokenIdHex
-              userId
-              userAssociatedAddresses
-            }
           }
           transactionHash
-        }
-        pageInfo {
-          nextCursor
-          prevCursor
         }
       }
       polygon: TokenTransfers(
@@ -128,37 +102,11 @@ export const requesterTxWithTargetQuery =
         TokenTransfer {
           from {
             addresses
-            domains {
-              name
-            }
-            socials {
-              dappName
-              profileName
-              profileTokenId
-              profileTokenIdHex
-              userId
-              userAssociatedAddresses
-            }
           }
           to {
             addresses
-            domains {
-              name
-            }
-            socials {
-              dappName
-              profileName
-              profileTokenId
-              profileTokenIdHex
-              userId
-              userAssociatedAddresses
-            }
           }
           transactionHash
-        }
-        pageInfo {
-          nextCursor
-          prevCursor
         }
       }
 }`;
