@@ -159,13 +159,13 @@ const TrustScore: NextPage = () => {
             </div>
 
             <div className="flex flex-col mt-2 px-7 py-4 bg-base-200 opacity-80 rounded-2xl shadow-lg border-2 border-primary">
-              <span className="text-accent">Test Requester</span>
+              <span className="text-accent-content">Test Requester</span>
               <AddressInput
                 placeholder="Test Requester"
                 value={requester ?? ""}
                 onChange={value => setRequester(value)}
               />
-              <span className="mt-1 text-accent">Query Threshold</span>
+              <span className="mt-1 text-accent-content">Query Threshold</span>
               <UInt8Input
                 value={threshold ?? 0n}
                 onChange={value => setThreshold(BigInt(value))}
@@ -176,7 +176,7 @@ const TrustScore: NextPage = () => {
                   setTestSender({ args: [requester, Number(threshold)] });
                 }}
                 disabled={setTestSenderLoading}
-                className="mt-2 btn btn-secondary btn-sm normal-case font-bold text-md"
+                className="mt-2 btn btn-primary btn-sm normal-case font-bold text-md"
               >
                 <CalculatorIcon className="h-6 w-6" />
                 Set Config
@@ -186,13 +186,13 @@ const TrustScore: NextPage = () => {
             <div className="mt-4 pt-2 flex flex-col items-center w-full justify-center border-t-4 border-primary">
               <span className="text-xl">Request Target's Trust Score</span>
               <div className="flex flex-col mt-2 px-7 py-4 bg-base-200 opacity-80 rounded-2xl shadow-lg border-2 border-primary">
-                <span className="text-primary">Target Address</span>
+                <span className="text-accent-content">Target Address</span>
                 <AddressInput
                   placeholder="Target Address"
                   value={target ?? ""}
                   onChange={value => setTarget(value)}
                 />
-                <span className="mt-1 text-primary">Query Threshold</span>
+                <span className="mt-1 text-accent-content">Query Threshold</span>
                 <UInt8Input
                   value={threshold ?? 0n}
                   onChange={value => setThreshold(BigInt(value))}
@@ -207,7 +207,7 @@ const TrustScore: NextPage = () => {
                     getTargetTrustScore({ args: [target, Number(threshold)] });
                   }}
                   disabled={isRequesting}
-                  className="mt-2 btn btn-secondary btn-sm normal-case font-bold text-md"
+                  className="mt-2 btn btn-primary btn-sm normal-case font-bold text-md"
                 >
                   <svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" className="h-6 w-6">
                     <path

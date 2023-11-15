@@ -22,7 +22,7 @@ export const TrustScoreReceivedEvents = ({ received }: TrustScoreReceivedEventsP
       </div>
 
       <table className="mt-4 p-2 bg-base-100 table table-zebra shadow-sm w-full overflow-hidden">
-        <thead className="text-secondary text-sm">
+        <thead className="text-accent-content text-sm">
           <tr>
             <th className="bg-primary text-sm" colSpan={2}>
               <span>Requester</span>
