@@ -22,7 +22,7 @@ export const TrustScoreRequestEvents = ({ requests }: TrustScoreRequestEventsPro
       </div>
 
       <table className="mt-4 p-2 bg-base-100 table table-zebra shadow-lg w-full overflow-hidden">
-        <thead className="text-secondary text-md">
+        <thead className="text-accent-content text-md">
           <tr>
             <th className="bg-primary text-md" colSpan={2}>
               <span>Requester</span>
