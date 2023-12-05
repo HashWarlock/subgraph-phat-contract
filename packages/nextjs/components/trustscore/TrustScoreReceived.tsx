@@ -3,11 +3,9 @@ import { Address } from "../scaffold-eth";
 import { Address as AddressType } from "viem";
 
 export type TrustScoreReceived = {
-  reqid: string;
-  requester: AddressType;
+  reqId: string;
   target: AddressType;
-  threshold: string;
-  theGraphTrustScore: string;
+  score: string;
 };
 
 export type TrustScoreReceivedEventsProps = {
@@ -21,37 +19,25 @@ export const TrustScoreReceivedEvents = ({ received }: TrustScoreReceivedEventsP
         <p className="flex justify-center text-lg font-bold">Trust Score Received Events</p>
       </div>
 
-      <table className="mt-4 p-2 bg-base-100 table table-zebra shadow-sm w-full overflow-hidden">
+      <table className="mt-4 p-2 bg-base-100 table table-zebra shadow-lg w-full overflow-hidden border-2 border-base-300">
         <thead className="text-accent-content text-sm">
           <tr>
-            <th className="bg-primary text-sm" colSpan={2}>
-              <span>Requester</span>
-            </th>
             <th className="bg-primary text-sm" colSpan={2}>
               <span>Target</span>
             </th>
             <th className="bg-primary text-sm">
-              <span>Threshold (1-5)</span>
-            </th>
-            <th className="bg-primary text-sm">
-              <span>Trusted (True/False)</span>
+              <span>Score</span>
             </th>
           </tr>
         </thead>
         <tbody>
-          {received.map(({ reqid, requester, target, threshold, theGraphTrustScore }, i) => (
+          {received.map(({ reqId, target, score }, i) => (
             <tr key={i}>
-              <td colSpan={2} className="py-2.5">
-                <Address address={requester} size="sm" />
-              </td>
               <td colSpan={2} className="py-2.5">
                 <Address address={target} size="sm" />
               </td>
-              <td className="col-span-1 text-sm">
-                <span> {threshold} </span>
-              </td>
-              <td className={theGraphTrustScore === "TRUE" ? 'py-0.5 badge badge-success' : 'col-span-1 text-sm text-red'}>
-                <span> {theGraphTrustScore} </span>
+              <td className={score >= "50" ? 'py-0.5 text-success' : 'col-span-1 text-sm text-red'}>
+                <span> {score} </span>
               </td>
             </tr>
           ))}
