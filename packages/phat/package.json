@@ -6,7 +6,7 @@
   "scripts": {
     "build-function": "phat-fn build src/index.ts",
     "run-function": "phat-fn run dist/index.js",
-    "localhost-watch": "phat-fn watch 0x5FbDB2315678afecb367f032d93F642f64180aa3 ../foundry/out/YourContract.sol/YourContract.json ./dist/index.js -a https://api.airstack.xyz/gql",
+    "localhost-watch": "phat-fn watch 0x5FbDB2315678afecb367f032d93F642f64180aa3 ../foundry/out/YourContract.sol/YourContract.json ./dist/index.js -a '{\"apiUrl\": \"https://gateway.thegraph.com/api/\", \"apiKey\": \"cd22a01e5b7f9828cddcb52caf03ee79\"}'",
     "test-deploy-function": "phat-fn upload --coreSettings=https://api.airstack.xyz/gql",
     "main-deploy-function": "phat-fn upload --mode=production --coreSettings=https://api.airstack.xyz/gql",
     "test-update-function": "phat-fn update",
@@ -36,14 +36,10 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "4.9.3",
-    "@openzeppelin/contracts-upgradeable": "^4.9.3",
-    "@phala/ethers": "^6.6.3",
-    "@phala/fn": "^0.1.13",
-    "@phala/pink-env": "^1.0.11",
-    "@phala/sdk": "^0.5.3-nightly-20231013",
-    "@scale-codec/core": "2.0.1",
+    "@phala/fn": "^0.2.8",
+    "@phala/solidity": "^0.0.3",
     "dedent": "^1.5.1",
     "dotenv": "^16.0.3",
-    "viem": "^1.18.0"
+    "viem": "^1.19.3"
   }
 }

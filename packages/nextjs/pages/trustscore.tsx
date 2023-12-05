@@ -4,9 +4,7 @@ import { Address as AddressType } from "viem";
 import { CalculatorIcon } from "@heroicons/react/24/outline";
 import { MetaHeader } from "~~/components/MetaHeader";
 import { AddressInput, IntegerVariant } from "~~/components/scaffold-eth";
-import { UInt8Input } from "~~/components/trustscore/Input/UInt8Input";
 import { TrustScoreReceived, TrustScoreReceivedEvents } from "~~/components/trustscore/TrustScoreReceived";
-import { TrustScoreRequest, TrustScoreRequestEvents } from "~~/components/trustscore/TrustScoreRequest";
 import {
   useScaffoldContractRead,
   useScaffoldContractWrite,
@@ -19,69 +17,14 @@ const ROLL_ETH_VALUE = "0.002";
 const MAX_TABLE_ROWS = 10;
 
 const TrustScore: NextPage = () => {
-  const [requests, setRequests] = useState<TrustScoreRequest[]>([]);
   const [received, setReceived] = useState<TrustScoreReceived[]>([]);
-  const [requester, setRequester] = useState<AddressType>();
   const [target, setTarget] = useState<AddressType>();
-  const [threshold, setThreshold] = useState<bigint>(BigInt(0));
-
   const [requested, setRequested] = useState(false);
   const [isRequesting, setIsRequesting] = useState(false);
 
-  const { data: lastTargetAddress } = useScaffoldContractRead({
-    contractName: "YourContract",
-    functionName: "lastTargetAddress",
-  });
-
-  const { data: requestsHistoryData, isLoading: requestsHistoryLoading } = useScaffoldEventHistory({
-    contractName: "YourContract",
-    eventName: "TrustScoreRequested",
-    fromBlock: 0n,
-  });
-
-  useEffect(() => {
-    if (!requests.length && !!requestsHistoryData?.length && !requestsHistoryLoading) {
-      setRequests(
-        (
-          requestsHistoryData?.map(({ args }) => ({
-            requester: args.requester,
-            target: args.target,
-            threshold: args.threshold.toString().toUpperCase(),
-            premium: args.premium,
-            value: args.value,
-          })) || []
-        ).slice(0, MAX_TABLE_ROWS),
-      );
-      console.log(requests);
-    }
-  }, [requests, requestsHistoryData, requestsHistoryLoading]);
-
-  useScaffoldEventSubscriber({
-    contractName: "YourContract",
-    eventName: "TrustScoreRequested",
-    listener: logs => {
-      logs.map(log => {
-        const { requester, target, threshold, premium, value } = log.args;
-
-        if (requester && target && threshold) {
-          // setTimeout(() => {
-          setIsRequesting(false);
-          // @ts-ignore
-          setRequests(requests =>
-            [{ requester, target, threshold: threshold.toString().toUpperCase(), premium, value }, ...requests].slice(
-              0,
-              MAX_TABLE_ROWS,
-            ),
-          );
-          // }, ROLLING_TIME_MS);
-        }
-      });
-    },
-  });
-
   const { data: receivedHistoryData, isLoading: receivedHistoryLoading } = useScaffoldEventHistory({
     contractName: "YourContract",
-    eventName: "TheGraphTrustScoreReceived",
+    eventName: "ResponseReceived",
     fromBlock: 0n,
   });
 
@@ -90,11 +33,9 @@ const TrustScore: NextPage = () => {
       setReceived(
         (
           receivedHistoryData?.map(({ args }) => ({
-            reqid: args.reqid.toString().toUpperCase(),
-            requester: args.requester,
+            reqId: args.reqId?.toString().toUpperCase(),
             target: args.target,
-            threshold: args.threshold.toString().toUpperCase(),
-            theGraphTrustScore: args.theGraphTrustScore.toString().toUpperCase(),
+            score: args.score?.toString().toUpperCase(),
           })) || []
         ).slice(0, MAX_TABLE_ROWS),
       );
@@ -104,18 +45,18 @@ const TrustScore: NextPage = () => {
 
   useScaffoldEventSubscriber({
     contractName: "YourContract",
-    eventName: "TheGraphTrustScoreReceived",
+    eventName: "ResponseReceived",
     listener: logs => {
       logs.map(log => {
-        const { reqid, requester, target, threshold, theGraphTrustScore } = log.args;
-        if (requester && target && threshold) {
-          console.log(`[${reqid}, ${requester}, ${target}, ${threshold}, ${theGraphTrustScore}]`);
+        const { reqId, target, score } = log.args;
+        if (reqId && target) {
+          console.log(`[${reqId}, ${target}, ${score}]`);
           // setTimeout(() => {
           setIsRequesting(false);
           setRequested(false);
           // @ts-ignore
           setReceived(received =>
-            [{ reqid: reqid.toString().toUpperCase(), requester, target, threshold: threshold.toString().toUpperCase(), theGraphTrustScore: theGraphTrustScore.toString().toUpperCase() }, ...received].slice(0, MAX_TABLE_ROWS),
+            [{ reqid: reqId.toString().toUpperCase(), target, score: score.toString().toUpperCase() }, ...received].slice(0, MAX_TABLE_ROWS),
           );
           // }, ROLLING_TIME_MS);
         }
@@ -123,22 +64,10 @@ const TrustScore: NextPage = () => {
     },
   });
 
-  const {
-    writeAsync: setTestSender,
-    isError: setTestSenderError,
-    isLoading: setTestSenderLoading,
-  } = useScaffoldContractWrite({
+  const { writeAsync: request, isError: targetTrustScoreError } = useScaffoldContractWrite({
     contractName: "YourContract",
-    functionName: "setTestSender",
-    value: "0.002",
-    args: [requester, Number(threshold)],
-  });
-
-  const { writeAsync: getTargetTrustScore, isError: targetTrustScoreError } = useScaffoldContractWrite({
-    contractName: "YourContract",
-    functionName: "getTargetTrustScore",
-    value: "0.002",
-    args: [target, Number(threshold)],
+    functionName: "request",
+    args: [target],
   });
 
   useEffect(() => {
@@ -152,38 +81,9 @@ const TrustScore: NextPage = () => {
     <>
       <MetaHeader />
       <div className="py-2.5 px-2.5">
-        <div className="grid grid-cols-2 max-md:grid-cols-1">
+        <div className="grid grid-cols-1 max-md:grid-cols-1">
           <div className="flex flex-col items-center pt-4 max-md:row-start-1">
-            <div className="flex w-full justify-center">
-              <span className="text-2xl"> Set Test Requester and Query Threshold </span>
-            </div>
 
-            <div className="flex flex-col mt-2 px-7 py-4 bg-primary opacity-80 rounded-2xl shadow-lg border-2 border-base-300">
-              <span className="text-accent-content">Test Requester</span>
-              <AddressInput
-                placeholder="Test Requester"
-                value={requester ?? ""}
-                onChange={value => setRequester(value)}
-              />
-              <span className="mt-1 text-accent-content">Query Threshold</span>
-              <UInt8Input
-                value={threshold ?? 0n}
-                onChange={value => setThreshold(BigInt(value))}
-                variant={IntegerVariant.UINT8}
-              />
-              <button
-                onClick={() => {
-                  setTestSender({ args: [requester, Number(threshold)] });
-                }}
-                disabled={setTestSenderLoading}
-                className="mt-2 btn btn-sm normal-case font-bold text-md"
-              >
-                <CalculatorIcon className="h-6 w-6" />
-                Set Config
-              </button>
-            </div>
-
-            <div className="mt-4 pt-2 flex flex-col items-center w-full justify-center border-t-4 border-primary">
               <span className="text-xl">Request Target's Trust Score</span>
               <div className="flex flex-col mt-2 px-7 py-4 bg-primary opacity-80 rounded-2xl shadow-lg border-2 border-base-300 ">
                 <span className="text-accent-content">Target Address</span>
@@ -192,19 +92,13 @@ const TrustScore: NextPage = () => {
                   value={target ?? ""}
                   onChange={value => setTarget(value)}
                 />
-                <span className="mt-1 text-accent-content">Query Threshold</span>
-                <UInt8Input
-                  value={threshold ?? 0n}
-                  onChange={value => setThreshold(BigInt(value))}
-                  variant={IntegerVariant.UINT8}
-                />
                 <button
                   onClick={() => {
                     if (!requested) {
                       setRequested(true);
                     }
                     setIsRequesting(true);
-                    getTargetTrustScore({ args: [target, Number(threshold)] });
+                    request({ args: [target] });
                   }}
                   disabled={isRequesting}
                   className="mt-2 btn btn-sm normal-case font-bold text-md"
@@ -220,9 +114,8 @@ const TrustScore: NextPage = () => {
                 </button>
               </div>
             </div>
-          </div>
+
           <div className="max-lg:row-start-1">
-            <TrustScoreRequestEvents requests={requests} />
             <TrustScoreReceivedEvents received={received} />
           </div>
         </div>

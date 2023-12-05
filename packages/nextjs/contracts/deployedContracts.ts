@@ -13,7 +13,7 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address",
-              name: "_owner",
+              name: "phatAttestor",
               type: "address",
             },
           ],
@@ -235,20 +235,14 @@ const deployedContracts = {
             {
               indexed: false,
               internalType: "address",
-              name: "requester",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "address",
               name: "target",
               type: "address",
             },
             {
               indexed: false,
-              internalType: "bool",
-              name: "error",
-              type: "bool",
+              internalType: "uint256",
+              name: "errno",
+              type: "uint256",
             },
           ],
           name: "ErrorReceived",
@@ -304,26 +298,14 @@ const deployedContracts = {
             {
               indexed: false,
               internalType: "address",
-              name: "requester",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "address",
               name: "target",
               type: "address",
             },
             {
               indexed: false,
-              internalType: "uint8",
-              name: "threshold",
-              type: "uint8",
-            },
-            {
-              indexed: false,
-              internalType: "bool",
-              name: "theGraphTrustScore",
-              type: "bool",
+              internalType: "uint256",
+              name: "score",
+              type: "uint256",
             },
           ],
           name: "ResponseReceived",
@@ -405,99 +387,6 @@ const deployedContracts = {
           type: "event",
         },
         {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: false,
-              internalType: "address",
-              name: "_testSender",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "uint8",
-              name: "threshold",
-              type: "uint8",
-            },
-          ],
-          name: "TestSenderUpdated",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "reqid",
-              type: "uint256",
-            },
-            {
-              indexed: false,
-              internalType: "address",
-              name: "requester",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "address",
-              name: "target",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "uint8",
-              name: "threshold",
-              type: "uint8",
-            },
-            {
-              indexed: false,
-              internalType: "bool",
-              name: "theGraphTrustScore",
-              type: "bool",
-            },
-          ],
-          name: "TheGraphTrustScoreReceived",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "address",
-              name: "requester",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "address",
-              name: "target",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "uint8",
-              name: "threshold",
-              type: "uint8",
-            },
-            {
-              indexed: false,
-              internalType: "bool",
-              name: "premium",
-              type: "bool",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "value",
-              type: "uint256",
-            },
-          ],
-          name: "TrustScoreRequested",
-          type: "event",
-        },
-        {
           inputs: [],
           name: "ATTESTOR_ROLE",
           outputs: [
@@ -518,6 +407,25 @@ const deployedContracts = {
               internalType: "bytes32",
               name: "",
               type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "accountTrustScores",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
             },
           ],
           stateMutability: "view",
@@ -672,24 +580,6 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "address",
-              name: "_target",
-              type: "address",
-            },
-            {
-              internalType: "uint8",
-              name: "threshold",
-              type: "uint8",
-            },
-          ],
-          name: "getTargetTrustScore",
-          outputs: [],
-          stateMutability: "payable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
               internalType: "bytes32",
               name: "role",
               type: "bytes32",
@@ -730,29 +620,16 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [],
-          name: "lastTargetAddress",
-          outputs: [
+          inputs: [
             {
-              internalType: "address",
-              name: "",
-              type: "address",
+              internalType: "bytes",
+              name: "malformedData",
+              type: "bytes",
             },
           ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "lastTrustScore",
-          outputs: [
-            {
-              internalType: "bool",
-              name: "",
-              type: "bool",
-            },
-          ],
-          stateMutability: "view",
+          name: "malformedRequest",
+          outputs: [],
+          stateMutability: "nonpayable",
           type: "function",
         },
         {
@@ -967,19 +844,6 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [],
-          name: "premium",
-          outputs: [
-            {
-              internalType: "bool",
-              name: "",
-              type: "bool",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
           inputs: [
             {
               internalType: "bytes",
@@ -1051,6 +915,19 @@ const deployedContracts = {
         {
           inputs: [
             {
+              internalType: "address",
+              name: "target",
+              type: "address",
+            },
+          ],
+          name: "request",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
               internalType: "bytes32",
               name: "role",
               type: "bytes32",
@@ -1109,18 +986,13 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address",
-              name: "_testSender",
+              name: "phatAttestor",
               type: "address",
             },
-            {
-              internalType: "uint8",
-              name: "threshold",
-              type: "uint8",
-            },
           ],
-          name: "setTestSender",
+          name: "setAttestor",
           outputs: [],
-          stateMutability: "payable",
+          stateMutability: "nonpayable",
           type: "function",
         },
         {
@@ -1137,19 +1009,6 @@ const deployedContracts = {
               internalType: "bool",
               name: "",
               type: "bool",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "testSender",
-          outputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
             },
           ],
           stateMutability: "view",
@@ -1173,49 +1032,6 @@ const deployedContracts = {
           ],
           stateMutability: "pure",
           type: "function",
-        },
-        {
-          inputs: [],
-          name: "totalCounter",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          name: "userTrustScoreThresholds",
-          outputs: [
-            {
-              internalType: "uint8",
-              name: "",
-              type: "uint8",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "withdraw",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          stateMutability: "payable",
-          type: "receive",
         },
       ],
     },

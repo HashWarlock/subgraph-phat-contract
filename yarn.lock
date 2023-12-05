@@ -19,13 +19,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@adraffy/ens-normalize@npm:1.9.2":
-  version: 1.9.2
-  resolution: "@adraffy/ens-normalize@npm:1.9.2"
-  checksum: a9fdeb9e080774c19e4b7f9f60aa5b37cf23fe0e8fe80284bf8221f7396e9f78642bfd39a09a94a4dc3fb8e70f2ac81545204bdcaf222d93f4c4c2ae1f0dca0b
-  languageName: node
-  linkType: hard
-
 "@adraffy/ens-normalize@npm:1.9.4":
   version: 1.9.4
   resolution: "@adraffy/ens-normalize@npm:1.9.4"
@@ -2921,13 +2914,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@noble/hashes@npm:1.1.2":
-  version: 1.1.2
-  resolution: "@noble/hashes@npm:1.1.2"
-  checksum: 3c2a8cb7c2e053811032f242155d870c5eb98844d924d69702244d48804cb03b42d4a666c49c2b71164420d8229cb9a6f242b972d50d5bb2f1d673b98b041de2
-  languageName: node
-  linkType: hard
-
 "@noble/hashes@npm:1.2.0, @noble/hashes@npm:~1.2.0":
   version: 1.2.0
   resolution: "@noble/hashes@npm:1.2.0"
@@ -3423,13 +3409,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openzeppelin/contracts-upgradeable@npm:^4.9.3":
-  version: 4.9.3
-  resolution: "@openzeppelin/contracts-upgradeable@npm:4.9.3"
-  checksum: bda0240b1d44c913ec5a4e109c622f216c2bbd7b468d210822f75782a5f7fe0609d08bf03b78b253333625e99e507cf2f75212f1de3b274bd9fc64ae967aeec3
-  languageName: node
-  linkType: hard
-
 "@openzeppelin/contracts@npm:4.9.3, @openzeppelin/contracts@npm:^4.8.2":
   version: 4.9.3
   resolution: "@openzeppelin/contracts@npm:4.9.3"
@@ -3582,27 +3561,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@phala/ethers@npm:^6.6.3":
-  version: 6.6.3
-  resolution: "@phala/ethers@npm:6.6.3"
-  dependencies:
-    "@adraffy/ens-normalize": 1.9.2
-    "@noble/hashes": 1.1.2
-    "@noble/secp256k1": 1.7.1
-    "@types/node": 18.15.13
-    aes-js: 4.0.0-beta.5
-    tslib: 2.4.0
-    ws: 8.5.0
-  checksum: cd1c9fe4d58b9361b084fcdef7c12698ef7b4821202c120649989fe1a8abd8d0ec20d3b0c1be039e0b3f281673a01f92fdc4c4105ce3abdc3ee0eacbf83b3063
-  languageName: node
-  linkType: hard
-
-"@phala/fn@npm:^0.1.13":
-  version: 0.1.13
-  resolution: "@phala/fn@npm:0.1.13"
+"@phala/fn@npm:^0.2.8":
+  version: 0.2.8
+  resolution: "@phala/fn@npm:0.2.8"
   dependencies:
     "@oclif/core": ^2
-    "@phala/sdk": ^0.5.3-nightly-20231011-1
+    "@phala/pink-env": ^1.0.13
+    "@phala/sdk": ^0.5.6
     "@types/node-fetch": 2
     chalk: 4
     dotenv: ^16.3.1
@@ -3612,31 +3577,32 @@ __metadata:
     quickjs-emscripten: ^0.23.0
     quickjs-emscripten-sync: ^1.5.2
     simple-git: ^3.19.1
-    sync-request: ^6.1.0
+    sync-rpc: ^1.3.6
     terser-webpack-plugin: ^5.3.9
     ts-loader: ^9.4.4
     ts-node: ^10.9.1
     typescript: ^5.2.2
+    undici: ^5.27.0
     upath: ^2.0.1
     webpack: ^5.88.2
     webpack-merge: ^5.9.0
     webpack-virtual-modules: ^0.5.0
   bin:
     phat-fn: bin/run
-  checksum: 606e2b8b8041d4a629acdce0cbb490cfbc477b5c5f855638ec8bc37421b3c9415036acd90c40d087ea5cc658c382f0e6b29dfd3891df6a53e1de71e279706899
+  checksum: c8e4f88d6728b810526a4570865b2c7ed82317dff85549c9dbc639e4b4cfe88805f3e216a2c9aa12307c96d754832e5f321178e985ae6a1f402aa8ea0c423f2a
   languageName: node
   linkType: hard
 
-"@phala/pink-env@npm:^1.0.11":
+"@phala/pink-env@npm:^1.0.13":
   version: 1.0.13
   resolution: "@phala/pink-env@npm:1.0.13"
   checksum: 726727191f8d189183bcafa4ddc6a150218d3e55663a0b983edffa91cac7161ea8bea38d2ecfdfdd413ca10214e56f262f106d3be7bc14b736b710b18508ba56
   languageName: node
   linkType: hard
 
-"@phala/sdk@npm:^0.5.3-nightly-20231011-1, @phala/sdk@npm:^0.5.3-nightly-20231013":
-  version: 0.5.4
-  resolution: "@phala/sdk@npm:0.5.4"
+"@phala/sdk@npm:^0.5.6":
+  version: 0.5.6
+  resolution: "@phala/sdk@npm:0.5.6"
   dependencies:
     "@polkadot/api": ^10.9.1
     "@polkadot/api-contract": ^10.9.1
@@ -3651,7 +3617,7 @@ __metadata:
     randombytes: ^2.1.0
     rxjs: ^7.8.1
     viem: ^1.5.0
-  checksum: 390530de7535d6a1df8b6d4de7622af96f760fe96cc6b487f500969ef4cce7eb167c50e34abe66cfb08e7d77c01af9a3797f2da874d1f1918fa44f403b00de35
+  checksum: 391369d1fe1db6be326122214f4b95829dc09ca555c6db105cdc3e2b1c8d9f5dfc15a2c78191e835edba364eb6e9a3b4be73f89d9c5f687e564ce14487cd261a
   languageName: node
   linkType: hard
 
@@ -3667,12 +3633,8 @@ __metadata:
     "@nomiclabs/hardhat-ethers": ^2.0.0
     "@nomiclabs/hardhat-etherscan": ^3.0.0
     "@openzeppelin/contracts": 4.9.3
-    "@openzeppelin/contracts-upgradeable": ^4.9.3
-    "@phala/ethers": ^6.6.3
-    "@phala/fn": ^0.1.13
-    "@phala/pink-env": ^1.0.11
-    "@phala/sdk": ^0.5.3-nightly-20231013
-    "@scale-codec/core": 2.0.1
+    "@phala/fn": ^0.2.8
+    "@phala/solidity": ^0.0.3
     "@typechain/ethers-v5": ^10.1.0
     "@typechain/hardhat": ^6.1.2
     "@types/chai": ^4.2.0
@@ -3688,7 +3650,7 @@ __metadata:
     ts-node: ">=8.0.0"
     typechain: ^8.1.0
     typescript: ^5.2.2
-    viem: ^1.18.0
+    viem: ^1.19.3
   languageName: unknown
   linkType: soft
 
@@ -4367,30 +4329,6 @@ __metadata:
   version: 3.13.2
   resolution: "@safe-global/safe-gateway-typescript-sdk@npm:3.13.2"
   checksum: a1689557743b70ce8814974443d28d54d39d73e16ed2f5eeb044740287e38c052af00016278ba6aa0ab8523ad5dec4b79c609e5d192bc8a19434c076210050ed
-  languageName: node
-  linkType: hard
-
-"@scale-codec/core@npm:2.0.1":
-  version: 2.0.1
-  resolution: "@scale-codec/core@npm:2.0.1"
-  dependencies:
-    "@scale-codec/enum": ^2.1.1
-    "@scale-codec/util": ^1.1.2
-  checksum: e4ddad26b90d1386557a2978046bf78d052a3be7b5355805d5a4ea5d3b2019f13818541e0ca9ebbc9c5866e6300e8baaba1fcbe289d6d6ceefcfdeec3fb35b95
-  languageName: node
-  linkType: hard
-
-"@scale-codec/enum@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "@scale-codec/enum@npm:2.1.1"
-  checksum: 2c957280593cac62235bbb35a193c05f1bec6d06eb1db4128251f42519d9504ae4abc4f6cd8c4adfac9e92517e0bd4f42c463863f24745142a12c2fd6a621a8e
-  languageName: node
-  linkType: hard
-
-"@scale-codec/util@npm:^1.1.2":
-  version: 1.1.2
-  resolution: "@scale-codec/util@npm:1.1.2"
-  checksum: a76a092899cfb96e4c3b883d02f6de72a36533f7110178aab5fffc4b6d04c3d6c5b0245560230dffd4c97f322b264541e03801c9bf9af6c3b95558932053e06a
   languageName: node
   linkType: hard
 
@@ -17894,7 +17832,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sync-request@npm:^6.0.0, sync-request@npm:^6.1.0":
+"sync-request@npm:^6.0.0":
   version: 6.1.0
   resolution: "sync-request@npm:6.1.0"
   dependencies:
@@ -17905,7 +17843,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sync-rpc@npm:^1.2.1":
+"sync-rpc@npm:^1.2.1, sync-rpc@npm:^1.3.6":
   version: 1.3.6
   resolution: "sync-rpc@npm:1.3.6"
   dependencies:
@@ -18680,6 +18618,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"undici@npm:^5.27.0":
+  version: 5.28.2
+  resolution: "undici@npm:5.28.2"
+  dependencies:
+    "@fastify/busboy": ^2.0.0
+  checksum: f9e9335803f962fff07c3c11c6d50bbc76248bacf97035047155adb29c3622a65bd6bff23a22218189740133149d22e63b68131d8c40e78ac6cb4b6d686a6dfa
+  languageName: node
+  linkType: hard
+
 "unenv@npm:^1.7.4":
   version: 1.7.4
   resolution: "unenv@npm:1.7.4"
@@ -19184,7 +19131,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"viem@npm:^1.0.0, viem@npm:^1.18.0, viem@npm:^1.5.0":
+"viem@npm:^1.0.0, viem@npm:^1.5.0":
   version: 1.19.1
   resolution: "viem@npm:1.19.1"
   dependencies:
@@ -19202,6 +19149,27 @@ __metadata:
     typescript:
       optional: true
   checksum: 5ebb8d26894f4fc1f95c2510389827da19623b2b1f150ce95cb80680ee6e28aa9cb16f3e1a00662a0b81f8de301075e2349bbd14bac2ab90c55c5694092a38b0
+  languageName: node
+  linkType: hard
+
+"viem@npm:^1.19.3":
+  version: 1.19.11
+  resolution: "viem@npm:1.19.11"
+  dependencies:
+    "@adraffy/ens-normalize": 1.10.0
+    "@noble/curves": 1.2.0
+    "@noble/hashes": 1.3.2
+    "@scure/bip32": 1.3.2
+    "@scure/bip39": 1.2.1
+    abitype: 0.9.8
+    isows: 1.0.3
+    ws: 8.13.0
+  peerDependencies:
+    typescript: ">=5.0.4"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 33a26f361bb2597fe0b02dc98382eb66b83473c3a9765833969a45ac7b4017fa62d7ddc42f9d4d0f3473bec7096eb081651851473b4d0ff4ab56f71a2f6378a2
   languageName: node
   linkType: hard
 
