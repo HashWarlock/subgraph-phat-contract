@@ -1,4 +1,4 @@
-# 🏗 Scaffold-ETH 2
+# 🏗 Phat Scaffold-ETH w/ The Graph
 
 🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
 
@@ -61,6 +61,17 @@ This command deploys a test smart contract to the local network. The contract is
 
 ```
 yarn start
+```
+
+5. On a fourth terminal, build and start your Phat Contract to watch for new `request(address target)`:
+
+Build Phat Contract script
+```
+yarn phat:build
+```
+Run Phat Contract locally to watch for `request()`
+```
+yarn phat:watch
 ```
 
 Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the contract component or the example ui in the frontend. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.

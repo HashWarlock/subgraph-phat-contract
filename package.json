@@ -21,6 +21,8 @@
     "next:check-types": "yarn workspace @se-2/nextjs check-types",
     "next:format": "yarn workspace @se-2/nextjs format",
     "next:lint": "yarn workspace @se-2/nextjs lint",
+    "phat:build": "yarn workspace @phala/se-2 build-function",
+    "phat:watch": "yarn workspace @phala/se-2 localhost-watch",
     "precommit": "lint-staged",
     "prepare": "install-self-peers -- --ignore-scripts",
     "start": "yarn workspace @se-2/nextjs dev",
